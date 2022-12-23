@@ -1,0 +1,28 @@
+---
+- name: Configure apache2
+  hosts: all
+  tasks:
+   - name: Install apache2
+     apt:
+      name: apache2
+      state: present
+      update_cache: yes
+   - name: Edit the index.html file
+     copy:
+      content: "spandanait"
+      dest: /var/www/html/index.html
+   - name: Restart apache2
+     service:
+      name: apache2
+      state: restarted
+   - name: Check the apache response on all servers
+     uri:
+      url: "{{item}}"
+      status_code: 200
+     with_items:
+       - http://172.31.32.44
+       - http://172.31.40.147
+       - http://172.31.44.162
+       - http://172.31.42.80
+
+...
